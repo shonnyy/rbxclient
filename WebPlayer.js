@@ -6728,11 +6728,15 @@ var PThread = {
             var message = "worker sent an error!";
             if (e instanceof ErrorEvent) {
                 err(`${message} ${e.message} in ${e.filename}:${e.lineno}:${e.colno}`);
+            } else if (e instanceof Event) {
+                // Handle generic event errors
+                err(`${message} Event type: ${e.type} - Full Event: ${JSON.stringify(e)}`);
             } else {
-                err(`${message} ${e.type}: ${JSON.stringify(e)}`);
+                // Handle unexpected error types
+                err(`${message} Unknown error type: ${JSON.stringify(e)}`);
             }
-            throw e;
-        };   
+            throw e;  // Re-throw the error if necessary
+        };         
         worker.postMessage({
             "cmd": "load",
             "urlOrBlob": Module["mainScriptUrlOrBlob"] || _scriptDir,
