@@ -6727,12 +6727,12 @@ var PThread = {
         worker.onerror = e => {
             var message = "worker sent an error!";
             if (e instanceof ErrorEvent) {
-                err(message + " " + e.filename + ":" + e.lineno + ": " + e.message);
+                err(`${message} ${e.message} in ${e.filename}:${e.lineno}:${e.colno}`);
             } else {
-                err(message + " " + e.type);
+                err(`${message} ${e.type}: ${JSON.stringify(e)}`);
             }
             throw e;
-        };
+        };   
         worker.postMessage({
             "cmd": "load",
             "urlOrBlob": Module["mainScriptUrlOrBlob"] || _scriptDir,
